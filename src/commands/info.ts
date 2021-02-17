@@ -28,7 +28,7 @@ const config = (yargs: Argv) => {
 		});
 };
 
-const handler = async (args: CommandArgs) => {
+const handler = (args: CommandArgs) => {
 	catchError(() => {
 		const envInfoArgs: string[] = [];
 		if (args.node) envInfoArgs.push('--system', '--binaries', '--npmPackages', '--npmGlobalPackages', '--duplicate');

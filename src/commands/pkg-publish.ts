@@ -31,7 +31,7 @@ const config = (yargs: Argv) => {
 		});
 };
 
-const handler = async (args: CommandArgs) => {
+const handler = (args: CommandArgs) => {
 	catchError(() => {
 		checkNodeInstallation();
 

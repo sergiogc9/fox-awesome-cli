@@ -1,5 +1,3 @@
-import shell from 'shelljs';
-
 import log from 'lib/log';
 
 /**
@@ -9,12 +7,12 @@ import log from 'lib/log';
  * Throw example with message:
  * throw { code: 1, message: 'Some error ocurred' };
  */
-const catchError = (fn: (...args: unknown[]) => unknown) => {
+const catchError = async (fn: (...args: unknown[]) => unknown | Promise<unknown>) => {
 	try {
-		fn();
+		await fn();
 	} catch (e) {
 		if (e.message) log.error(`⚠️ ERROR: ${e.message}`);
-		shell.exit(e.code || 1);
+		process.exit(e.code || 1);
 	}
 };
 

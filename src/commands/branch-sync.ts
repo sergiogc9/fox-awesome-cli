@@ -1,9 +1,9 @@
 import chalk from 'chalk';
-import shell from 'shelljs';
 import { Argv } from 'yargs';
 
 import { catchError } from 'lib/error';
 import { checkGitInstallation } from 'lib/git';
+import { exec, execSilentWithThrow } from 'lib/shell';
 import log from 'lib/log';
 
 interface CommandArgs {
@@ -28,18 +28,18 @@ const config = (yargs: Argv) => {
 		});
 };
 
-const handler = async (args: CommandArgs) => {
+const handler = (args: CommandArgs) => {
 	catchError(() => {
 		checkGitInstallation();
 
-		const currentBranch = shell.exec('git branch --show-current', { silent: true }).trim();
+		const currentBranch = execSilentWithThrow('git branch --show-current').stdout.trim();
 		if (['master', 'develop'].includes(currentBranch)) {
 			return log.warn(`You are in a source branch: ${chalk.bold.underline(currentBranch)}. Doing nothing.`);
 		}
 
 		const sourceBranch = /^(hotfix|release)(\/|-).*/.test(currentBranch) ? 'master' : 'develop';
 		const params = args.rebase ? '--rebase' : '';
-		const { code } = shell.exec(`git pull origin ${sourceBranch} ${params}`);
+		const { code } = exec(`git pull origin ${sourceBranch} ${params}`);
 		if (code) throw { code };
 	});
 };

@@ -16,7 +16,7 @@ const config = (yargs: Argv) => {
 		.option('help', {  alias: 'h' });
 };
 
-const handler = async () => {
+const handler = () => {
 	catchError(() => {
 		checkNodeInstallation();
 		log.text(getCurrentPackageJson().version as string);

@@ -83,6 +83,8 @@ It works only in a basic **gitflow** workflow with the following branches:
 
 \* In the future this will be configurable.
 
+ℹ️ You can use most of git commands using this cli. All git commands not matching one of the cli custom commands can be executed. E.g.: `foxcli commit` or `foxcli merge master`.
+
 ### `branch-sync`
 
 Synchronizes the current branch with the remote source branch. By default **hotfix** and **release** branches are synchronized with **master** branch and **feature** branches are synchronized with **develop**.
@@ -101,6 +103,8 @@ Options:
 ## NodeJS commands
 
 These commands are helper commands to add non-existing commands or improve existing ones available in `npm` and / or `yarn`. Most of them are focused to be used in automated pipelines.
+
+ℹ️ You can use this cli to execute npm and / or yarn commands. If using a non cli custom command or git commands, the cli identifies if using npm or yarn in the project, and runs the passed command to it. E.g.: `foxcli publish` or `foxcli install`.
 
 ### `pkg-manager`
 

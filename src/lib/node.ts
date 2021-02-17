@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import shell from 'shelljs';
-import { execWithThrow } from './shell';
+import { execSilent, execSilentWithThrow } from './shell';
 
 type Manager = 'yarn' | 'npm' | 'unknown';
 
@@ -11,7 +10,7 @@ const isRootDir = (dir: string) => {
 };
 
 export const checkNodeInstallation = () => {
-	const { code } = shell.exec('node --version', { silent: true });
+	const { code } = execSilent('node --version');
 	if (code) throw { code, message: 'Node is not installed' };
 };
 
@@ -38,7 +37,117 @@ export const getCurrentPackageJson = (): Record<string, unknown> => {
 };
 
 export const getPackageVersions = (pkg: string): string[] => {
-	const versions = execWithThrow(`npm view ${pkg} versions`, true).stdout.replace(/'/g, '"');
+	const { stdout } = execSilentWithThrow(`npm view ${pkg} versions`);
+	const versions = stdout.replace(/'/g, '"');
 
 	return JSON.parse(versions);
 };
+
+export const NPM_COMMANDS = [
+	'access',
+	'adduser',
+	'audit',
+	'bin',
+	'bugs',
+	'cache',
+	'ci',
+	'completion',
+	'config',
+	'dedupe',
+	'deprecate',
+	'diff',
+	'dist-tag',
+	'docs',
+	'doctor',
+	'edit',
+	'exec',
+	'explain',
+	'explore',
+	'fund',
+	'help',
+	'help-search',
+	'hook',
+	'init',
+	'install',
+	'install-ci-test',
+	'install-test',
+	'link',
+	'logout',
+	'ls',
+	'org',
+	'outdated',
+	'owner',
+	'pack',
+	'ping',
+	'prefix',
+	'profile',
+	'prune',
+	'publish',
+	'rebuild',
+	'repo',
+	'restart',
+	'root',
+	'run-script',
+	'search',
+	'set-script',
+	'shrinkwrap',
+	'star',
+	'stars',
+	'start',
+	'stop',
+	'team',
+	'test',
+	'token',
+	'uninstall',
+	'unpublish',
+	'unstar',
+	'update',
+	'version',
+	'view',
+	'whoami'
+];
+
+export const YARN_COMMANDS = [
+	'add',
+	'audit',
+	'autoclean',
+	'bin',
+	'cache',
+	'check',
+	'config',
+	'create',
+	'dedupe',
+	'generate-lock-entry',
+	'global',
+	'help',
+	'import',
+	'info',
+	'init',
+	'install',
+	'licenses',
+	'link',
+	'list',
+	'lockfile',
+	'login',
+	'logout',
+	'outdated',
+	'owner',
+	'pack',
+	'policies',
+	'prune',
+	'publish',
+	'remove',
+	'run',
+	'self-update',
+	'tag',
+	'team',
+	'test',
+	'unlink',
+	'upgrade',
+	'upgrade-interactive',
+	'version',
+	'versions',
+	'why',
+	'workspace',
+	'workspaces'
+];
