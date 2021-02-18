@@ -4,7 +4,7 @@ import figlet from 'figlet';
 import { catchError } from 'lib/error';
 import log from 'lib/log';
 import { GIT_COMMANDS } from 'lib/git';
-import { getNodePackageManager, NPM_COMMANDS, YARN_COMMANDS } from 'lib/node';
+import { getCurrentPackageJson, getNodePackageManager, NPM_COMMANDS, YARN_COMMANDS } from 'lib/node';
 import { exec } from 'lib/shell';
 
 const handler = (args: string[]) => {
@@ -16,8 +16,17 @@ const handler = (args: string[]) => {
 			if (GIT_COMMANDS.includes(command)) return exec(`git ${fullCommand}`);
 
 			const pkgManager = getNodePackageManager();
-			if (pkgManager === 'yarn' && YARN_COMMANDS.includes(command)) return exec(`yarn ${fullCommand}`);
-			if (pkgManager === 'npm' && NPM_COMMANDS.includes(command)) return exec(`npm ${fullCommand}`);
+			let pkgJson;
+			try {
+				pkgJson = getCurrentPackageJson();
+			} catch (e) {} // eslint-disable-line no-empty
+			if (pkgManager === 'yarn') {
+				if (YARN_COMMANDS.includes(command)) return exec(`yarn ${fullCommand}`);
+				if (pkgJson && (pkgJson.scripts as Record<string, unknown>)[command]) return exec(`yarn ${fullCommand}`);
+			} else if (pkgManager === 'npm') {
+				if (NPM_COMMANDS.includes(command)) return exec(`npm ${fullCommand}`);
+				if (pkgJson && (pkgJson.scripts as Record<string, unknown>)[command]) return exec(`npm run ${fullCommand}`);
+			}
 
 			throw { message: `The command ${command} does not exist.` };
 		} else {

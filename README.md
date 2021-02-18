@@ -106,6 +106,8 @@ These commands are helper commands to add non-existing commands or improve exist
 
 ℹ️ You can use this cli to execute npm and / or yarn commands. If using a non cli custom command or git commands, the cli identifies if using npm or yarn in the project, and runs the passed command to it. E.g.: `foxcli publish` or `foxcli install`.
 
+ℹ️ Scripts defined in _package.json_ can also be executed using the cli: `foxcli watch` or `foxcli build`.
+
 ### `pkg-manager`
 
 Checks the node package manager used in the current directory (and in its parents). Only works with `npm` and `yarn`.
