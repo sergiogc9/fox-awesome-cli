@@ -18,7 +18,7 @@ interface CommandArgs extends Arguments {
 	from?: string;
 }
 type PromptAnswer = {
-	branchType: string;
+	branchType: typeof branchTypes[number];
 	description: string;
 	issueId?: string;
 };
@@ -96,6 +96,15 @@ const handler = (args: CommandArgs) => {
 		// Create new branch from source branch
 		log.text('Creating new branch...');
 		execSilentWithThrow(`git checkout -b ${newBranch} ${sourceBranch}`);
+
+		// If branch is release, merge content from develop
+		if (answers.branchType === 'release') {
+			log.text('Merging most recent changes from develop...');
+			if (currentBranch !== 'develop') {
+				execSilentWithThrow(`git fetch origin develop:develop`);
+			}
+			execSilentWithThrow('git merge develop');
+		}
 
 		// Push to remote if necessary
 		if (args.push) {
