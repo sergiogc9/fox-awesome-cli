@@ -1,9 +1,20 @@
-import { execSilent } from 'lib/shell';
+import { execSilent, execSilentWithThrow } from 'lib/shell';
 
 export const checkGitInstallation = () => {
 	const { code } = execSilent('git --version');
 	if (code) throw { code, message: 'Git is not installed' };
 };
+
+export const getCurrentBranch = () => execSilentWithThrow('git branch --show-current').stdout.trim();
+
+export const existsLocalBranch = (branch: string) =>
+	execSilentWithThrow(`git branch --list ${branch}`).stdout.trim() === branch || getCurrentBranch() === branch;
+
+export const existsRemoteBranch = (branch: string) =>
+	execSilentWithThrow(`git ls-remote --heads origin ${branch}`).stdout.trim() !== '';
+
+export const getSourceBranchFromBranch = (branch: string) =>
+	/^(hotfix|release)(\/|-).*/.test(branch) ? 'master' : 'develop';
 
 export const GIT_COMMANDS = [
 	'add',

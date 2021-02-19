@@ -1,6 +1,7 @@
 import yargs from 'yargs';
 
 import defaultHandler from 'commands/default';
+import branchCreate from 'commands/branch-create';
 import branchSync from 'commands/branch-sync';
 import pkgManager from 'commands/pkg-manager';
 import pkgPublish from 'commands/pkg-publish';
@@ -30,4 +31,5 @@ yargs(process.argv.slice(2))
 	.command(pkgPublish.name, pkgPublish.description, pkgPublish.config, pkgPublish.handler)
 	.command(pkgVersion.name, pkgVersion.description, pkgVersion.config, pkgVersion.handler)
 	// Git commands
+	.command(branchCreate.name, branchCreate.description, branchCreate.config, branchCreate.handler)
 	.command(branchSync.name, branchSync.description, branchSync.config, branchSync.handler).argv;

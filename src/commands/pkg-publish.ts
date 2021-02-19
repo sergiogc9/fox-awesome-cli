@@ -19,7 +19,7 @@ const config = (yargs: Argv) => {
 		.usage('foxcli publish [options]')
 		.version(false)
 		.help('help')
-		.option('help', {  alias: 'h'})
+		.option('help', {  alias: 'h' })
 		.option('update', {
 			alias: 'u',
 			choices: ['major', 'minor', 'patch', 'prerelease'],

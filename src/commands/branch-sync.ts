@@ -2,8 +2,8 @@ import chalk from 'chalk';
 import { Argv } from 'yargs';
 
 import { catchError } from 'lib/error';
-import { checkGitInstallation } from 'lib/git';
-import { exec, execSilentWithThrow } from 'lib/shell';
+import { checkGitInstallation, getCurrentBranch, getSourceBranchFromBranch } from 'lib/git';
+import { exec } from 'lib/shell';
 import log from 'lib/log';
 
 interface CommandArgs {
@@ -32,12 +32,12 @@ const handler = (args: CommandArgs) => {
 	catchError(() => {
 		checkGitInstallation();
 
-		const currentBranch = execSilentWithThrow('git branch --show-current').stdout.trim();
+		const currentBranch = getCurrentBranch();
 		if (['master', 'develop'].includes(currentBranch)) {
 			return log.warn(`You are in a source branch: ${chalk.bold.underline(currentBranch)}. Doing nothing.`);
 		}
 
-		const sourceBranch = /^(hotfix|release)(\/|-).*/.test(currentBranch) ? 'master' : 'develop';
+		const sourceBranch = getSourceBranchFromBranch(currentBranch);
 		const params = args.rebase ? '--rebase' : '';
 		const { code } = exec(`git pull origin ${sourceBranch} ${params}`);
 		if (code) throw { code };
