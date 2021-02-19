@@ -13,6 +13,7 @@ An awesome cli tool for git, node, npm, yarn, bash and more.
     - [`help`](#help)
     - [`info`](#info)
   - [Git commands](#git-commands)
+    - [`branch-create`](#branch-create)
     - [`branch-sync`](#branch-sync)
   - [NodeJS commands](#nodejs-commands)
     - [`pkg-manager`](#pkg-manager)
@@ -85,13 +86,36 @@ It works only in a basic **gitflow** workflow with the following branches:
 
 ℹ️ You can use most of git commands using this cli. All git commands not matching one of the cli custom commands can be executed. E.g.: `foxcli commit` or `foxcli merge master`.
 
+### `branch-create`
+
+Creates a new branch using the last changes in source (or from) branch.
+
+This command performs:
+
+- Asks for branch type, issue id (if not provided) and description to generate a new branch name.
+- If not provided, detects the source branch, e.g. for feature it uses develop as source branch.
+- Pulls the most recent changes in source branch.
+- Creates the new branch.
+- If branch type is release, merges content from develop.
+- If push parameter is set, pushes the branch to remote.
+
+Options:
+
+- `--from`: Disables auto source branch detection to use instead the provided branch.
+- `-p, --push`: Pushes to remote the created branch at the end.
+
+Considerations:
+
+- By default, feature branches are created from develop. Hotfix and release branches are created from master.
+- If description is provided, it is appended at the end of the branch name, replacing spaces with underscores.
+
 ### `branch-sync`
 
 Synchronizes the current branch with the remote source branch. By default **hotfix** and **release** branches are synchronized with **master** branch and **feature** branches are synchronized with **develop**.
 
 If you are already in a source branch (i.e. master or develop) this command does nothing.
 
-Basically this command performs:
+This command performs:
 
 - Pulls the most recent changes from source branch.
 - Tries to merge these changes into the current branch. You can force doing a rebase using the `--rebase` parameter.
