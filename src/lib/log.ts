@@ -16,6 +16,10 @@ class Log {
 	public error = (text: string, chalkModifier: chalk.Chalk = chalk) => {
 		console.error(chalkModifier.redBright(text));
 	};
+
+	public success = (text: string, chalkModifier: chalk.Chalk = chalk) => {
+		console.error(chalkModifier.greenBright(text));
+	};
 }
 
 export default new Log();

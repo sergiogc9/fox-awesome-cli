@@ -2,13 +2,7 @@ import { Argv, Arguments } from 'yargs';
 import inquirer, { QuestionCollection } from 'inquirer';
 import chalk from 'chalk';
 
-import {
-	checkGitInstallation,
-	existsLocalBranch,
-	existsRemoteBranch,
-	getCurrentBranch,
-	getSourceBranchFromBranch
-} from 'lib/git';
+import * as git from 'lib/git';
 import { catchError } from 'lib/error';
 import { execSilentWithThrow } from 'lib/shell';
 import log from 'lib/log';
@@ -49,7 +43,7 @@ const config = (yargs: Argv) => {
 
 const handler = (args: CommandArgs) => {
 	catchError(async () => {
-		checkGitInstallation();
+		git.checkGitInstallation();
 
 		const argsIssueId = args._[1];
 
@@ -80,13 +74,13 @@ const handler = (args: CommandArgs) => {
 			? `-${answers.description.toLowerCase().replace(/\s+/g, '_')}`
 			: '';
 		const newBranch = `${answers.branchType}/${answers.issueId || argsIssueId}${branchDescription}`;
-		const sourceBranch = args.from || getSourceBranchFromBranch(newBranch);
-		const currentBranch = getCurrentBranch();
+		const sourceBranch = args.from || git.getSourceBranchFromBranch(newBranch);
+		const currentBranch = git.getCurrentBranch();
 
 		// Check if branch exists
 		log.text('Checking existing branches...');
-		if (existsLocalBranch(newBranch)) throw { message: `The branch ${newBranch} already exists.` };
-		if (existsRemoteBranch(newBranch)) throw { message: `The branch ${newBranch} already exists in remote.` };
+		if (git.existsLocalBranch(newBranch)) throw { message: `The branch ${newBranch} already exists.` };
+		if (git.existsRemoteBranch(newBranch)) throw { message: `The branch ${newBranch} already exists in remote.` };
 
 		// Update source branch
 		log.text(`Pulling most recent changes from branch ${sourceBranch}...`);

@@ -1,4 +1,12 @@
+import chalk from 'chalk';
+import inquirer from 'inquirer';
+
 import { execSilent, execSilentWithThrow } from 'lib/shell';
+import configStore from 'lib/config';
+import log from 'lib/log';
+import GithubProvider from 'providers/git/Github';
+import AzureProvider from 'providers/git/azure';
+import BitbucketProvider from 'providers/git/bitbucket';
 
 export const checkGitInstallation = () => {
 	const { code } = execSilent('git --version');
@@ -13,8 +21,66 @@ export const existsLocalBranch = (branch: string) =>
 export const existsRemoteBranch = (branch: string) =>
 	execSilentWithThrow(`git ls-remote --heads origin ${branch}`).stdout.trim() !== '';
 
-export const getSourceBranchFromBranch = (branch: string) =>
-	/^(hotfix|release)(\/|-).*/.test(branch) ? 'master' : 'develop';
+export const getRepoRemoteUrl = () => {
+	const { code, stdout } = execSilent('git config --get remote.origin.url');
+	if (code) throw { message: 'You are not in a git project' };
+	return stdout;
+};
+
+export const getSourceBranchFromBranch = (branch: string) => {
+	if (branch === 'develop' || /^(hotfix|release)(\/|-).*/.test(branch)) return 'master';
+	return 'develop';
+};
+
+const __detectRepoServer = async (repoUrl: string) => {
+	let detectedServer: GitServer;
+	if (repoUrl.includes('github.com')) detectedServer = 'github';
+	if (repoUrl.includes('azure.com')) detectedServer = 'azure';
+	if (repoUrl.includes('bitbucket.org')) detectedServer = 'bitbucket';
+
+	if (detectedServer) {
+		const answer = await inquirer.prompt<{ isCorrect: boolean }>([
+			{
+				name: 'isCorrect',
+				message: `Looks like this is repository from ${chalk.blueBright(detectedServer)}. Is this correct?`,
+				type: 'confirm',
+				default: false
+			}
+		]);
+		if (answer.isCorrect) return detectedServer;
+	} else log.warn('Not able to detect git server...');
+
+	const answer = await inquirer.prompt<{ server: GitServer }>([
+		{
+			name: 'server',
+			message: 'Which git server uses this repository?',
+			type: 'list',
+			choices: ['github', 'azure', 'bitbucket']
+		}
+	]);
+	return answer.server;
+};
+
+export const getRepoServer = async () => {
+	const repoUrl = getRepoRemoteUrl();
+	const repoServerConfigKey = `git.repo.${repoUrl.replace(/\.+/g, '\\.')}.server`;
+	let repoServer: string = configStore.get(repoServerConfigKey);
+	if (!repoServer) {
+		repoServer = await __detectRepoServer(repoUrl);
+		configStore.set(repoServerConfigKey, repoServer);
+	}
+	return repoServer as GitServer;
+};
+
+const __gitProviders = {
+	github: GithubProvider,
+	azure: AzureProvider,
+	bitbucket: BitbucketProvider
+};
+
+export const getGitProvider = (server: GitServer) => {
+	return new __gitProviders[server]();
+};
 
 export const GIT_COMMANDS = [
 	'add',
