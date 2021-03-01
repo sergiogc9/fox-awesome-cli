@@ -4,7 +4,7 @@ import inquirer from 'inquirer';
 import { execSilent, execSilentWithThrow } from 'lib/shell';
 import configStore from 'lib/config';
 import log from 'lib/log';
-import GithubProvider from 'providers/git/Github';
+import GithubProvider from 'providers/git/github';
 import AzureProvider from 'providers/git/azure';
 import BitbucketProvider from 'providers/git/bitbucket';
 
