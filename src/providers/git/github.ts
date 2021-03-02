@@ -81,10 +81,7 @@ class GithubProvider extends GitProvider {
 	};
 
 	private __detectRepoName = async (remoteUrl: string) => {
-		let repoName: string;
-		const regexMatch = remoteUrl.match(/^.*github.com[:|/](.*)\/(.*)\.git/);
-		// eslint-disable-next-line prefer-destructuring
-		if (regexMatch.length > 2) repoName = regexMatch[2];
+		const { name: repoName } = this.__getRepoDataFromUrl(remoteUrl);
 
 		if (repoName) {
 			const answer = await inquirer.prompt<{ isCorrect: boolean }>([
@@ -109,10 +106,7 @@ class GithubProvider extends GitProvider {
 	};
 
 	private __detectRepoOwner = async (remoteUrl: string) => {
-		let repoOwner: string;
-		const regexMatch = remoteUrl.match(/^.*github.com[:|/](.*)\/(.*)\.git/);
-		// eslint-disable-next-line prefer-destructuring
-		if (regexMatch.length > 2) repoOwner = regexMatch[1];
+		const { owner: repoOwner } = this.__getRepoDataFromUrl(remoteUrl);
 
 		if (repoOwner) {
 			const answer = await inquirer.prompt<{ isCorrect: boolean }>([
@@ -134,6 +128,12 @@ class GithubProvider extends GitProvider {
 			}
 		]);
 		return answer.owner;
+	};
+
+	private __getRepoDataFromUrl = (remoteUrl: string) => {
+		const regexMatch = remoteUrl.match(/^.*github.com[:|/](.*)\/(.*)\.git/);
+		const [, owner, name] = regexMatch;
+		return { name, owner };
 	};
 }
 
