@@ -15,6 +15,7 @@ An awesome cli tool for git, node, npm, yarn, bash and more.
   - [Git commands](#git-commands)
     - [`branch-create`](#branch-create)
     - [`branch-sync`](#branch-sync)
+    - [`pr`](#pr)
   - [NodeJS commands](#nodejs-commands)
     - [`pkg-manager`](#pkg-manager)
     - [`pkg-version`](#pkg-version)
@@ -123,6 +124,29 @@ This command performs:
 Options:
 
 - `-r, --rebase`: Forces git to use rebase.
+
+### `pr`
+
+Creates a PR for current branch. Target branch is set automatically following the gitflow branches, if `--target` option is not set.
+
+This command works with **Github**, **Azure DevOps** and **Bitbucket** repositories.
+
+This command needs a token or app password in order to call the necessary API. Follow the instructions when prompted.
+
+ℹ️ All personal data is saved only locally, i.e. it is not sent nor shared. See config command for further info.
+
+This command performs:
+
+- Asks for pull request data as title, description, etc...
+- Pushes current branch to remote.
+- Checks for saved authentication data or ask for it.
+- Creates the pull request through an API call.
+- IF success, the pull request page is opened in a browser.
+
+Options:
+
+- `--target`: Use a custom branch as target branch for the pull request.
+- `--draft`: Create the pull request as draft. This option is not available in some providers.
 
 ## NodeJS commands
 
