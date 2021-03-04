@@ -93,11 +93,11 @@ const handler = (args: CommandArgs) => {
 
 		// If branch is release, merge content from develop
 		if (answers.branchType === 'release') {
-			log.text('Merging most recent changes from develop...');
-			if (currentBranch !== 'develop') {
-				execSilentWithThrow(`git fetch origin develop:develop`);
+			log.text(`Merging most recent changes from ${git.DEVELOP_BRANCH}...`);
+			if (currentBranch !== git.DEVELOP_BRANCH) {
+				execSilentWithThrow(`git fetch origin ${git.DEVELOP_BRANCH}:${git.DEVELOP_BRANCH}`);
 			}
-			execSilentWithThrow('git merge develop');
+			execSilentWithThrow(`git merge ${git.DEVELOP_BRANCH}`);
 		}
 
 		// Push to remote if necessary

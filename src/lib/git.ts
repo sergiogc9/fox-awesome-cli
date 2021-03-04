@@ -8,6 +8,9 @@ import GithubProvider from 'providers/git/github';
 import AzureProvider from 'providers/git/azure';
 import BitbucketProvider from 'providers/git/bitbucket';
 
+export const MASTER_BRANCH = configStore.get('git.branch.master') || 'master';
+export const DEVELOP_BRANCH = configStore.get('git.branch.develop') || 'develop';
+
 export const checkGitInstallation = () => {
 	const { code } = execSilent('git --version');
 	if (code) throw { code, message: 'Git is not installed' };
@@ -28,8 +31,8 @@ export const getRepoRemoteUrl = () => {
 };
 
 export const getSourceBranchFromBranch = (branch: string) => {
-	if (branch === 'develop' || /^(hotfix|release)(\/|-).*/.test(branch)) return 'master';
-	return 'develop';
+	if (branch === DEVELOP_BRANCH || /^(hotfix|release)(\/|-).*/.test(branch)) return MASTER_BRANCH;
+	return DEVELOP_BRANCH;
 };
 
 const __detectRepoServer = async (repoUrl: string) => {

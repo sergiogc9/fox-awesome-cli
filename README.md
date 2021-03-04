@@ -81,6 +81,7 @@ With this command you can manage this data with the following actions:
 - See all data saved in JSON format.
 - Clear all data.
 - See path where the data is located.
+- Change default branches if not using master or develop.
 - Remove personal data saved related to git providers (Github, Azure, Bitbucket, etc.).
 - Remove saved data related to a git project or repository.
 
@@ -105,13 +106,13 @@ These commands are focused on making the developer life easier while working wit
 
 It works only in a basic **gitflow** workflow with the following branches:
 
-- `master`
+- `master` (configurable)
 - `hotfix/XXX` or `hotfix-XXX`
 - `release/XXX` or `release-XXX`
-- `develop`
+- `develop` (configurable)
 - `feature/XXX` or `feature-XXX`
 
-\* In the future this will be configurable.
+ℹ️ You can change default master and develop branches if you use others (e.g. main or devel) using the `config` command (see above).
 
 ℹ️ You can use most of git commands using this cli. All git commands not matching one of the cli custom commands can be executed. E.g.: `foxcli commit` or `foxcli merge master`.
 

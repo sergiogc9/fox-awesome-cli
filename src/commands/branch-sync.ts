@@ -2,7 +2,13 @@ import chalk from 'chalk';
 import { Argv } from 'yargs';
 
 import { catchError } from 'lib/error';
-import { checkGitInstallation, getCurrentBranch, getSourceBranchFromBranch } from 'lib/git';
+import {
+	checkGitInstallation,
+	DEVELOP_BRANCH,
+	getCurrentBranch,
+	getSourceBranchFromBranch,
+	MASTER_BRANCH
+} from 'lib/git';
 import { exec } from 'lib/shell';
 import log from 'lib/log';
 
@@ -33,7 +39,7 @@ const handler = (args: CommandArgs) => {
 		checkGitInstallation();
 
 		const currentBranch = getCurrentBranch();
-		if (['master', 'develop'].includes(currentBranch)) {
+		if ([MASTER_BRANCH, DEVELOP_BRANCH].includes(currentBranch)) {
 			return log.warn(`You are in a source branch: ${chalk.bold.underline(currentBranch)}. Doing nothing.`);
 		}
 

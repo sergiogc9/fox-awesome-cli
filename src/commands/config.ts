@@ -1,5 +1,6 @@
 import { Argv } from 'yargs';
 import inquirer, { QuestionCollection } from 'inquirer';
+import chalk from 'chalk';
 
 import configStore from 'lib/config';
 import log from 'lib/log';
@@ -90,10 +91,32 @@ const __removeGitProviderData = async () => {
 };
 
 const __removeGitProjectData = async () => {
-	const remoteUrl = await getRepoRemoteUrl();
+	const remoteUrl = getRepoRemoteUrl();
 	const gitProjectKey = `git.repo.${remoteUrl.replace(/\.+/g, '\\.')}`;
 	configStore.delete(gitProjectKey);
 	log.text('Data removed successfully!');
+};
+
+const __changeGitDefaultBranch = async (branch: string) => {
+	const savedBranch = configStore.get(`git.branch.${branch}`) || branch;
+	log.text('');
+	log.text(`Your ${branch} branch is ${chalk.blueBright.bold(savedBranch)}`);
+	const questions: QuestionCollection = [
+		{
+			name: 'branch',
+			type: 'input',
+			message: 'Enter the branch you want to use:',
+			default: savedBranch
+		}
+	];
+	const answers = await inquirer.prompt<{ branch: string }>(questions);
+	configStore.set(`git.branch.${branch}`, answers.branch);
+	log.text(`Your ${branch} branch has been set to ${chalk.greenBright.bold(answers.branch)}`);
+};
+
+const __changeGitDefaultBranches = async () => {
+	await __changeGitDefaultBranch('master');
+	await __changeGitDefaultBranch('develop');
 };
 
 const handler = (args: CommandArgs) => {
@@ -120,6 +143,11 @@ const handler = (args: CommandArgs) => {
 						name: "Clear all config data (can't be undone)",
 						value: 'clear'
 					},
+					new inquirer.Separator(),
+					{
+						name: 'Change git default branches',
+						value: 'changeGitBranches'
+					},
 					{
 						name: 'Remove git provider personal data (token, username, etc)',
 						value: 'removeGitProvider'
@@ -132,12 +160,13 @@ const handler = (args: CommandArgs) => {
 			}
 		];
 		const answers = await inquirer.prompt<{
-			option: 'all' | 'clear' | 'path' | 'removeGitProvider' | 'removeGitProject';
+			option: 'all' | 'clear' | 'path' | 'removeGitProvider' | 'removeGitProject' | 'changeGitBranches';
 		}>(questions);
 
 		if (answers.option === 'path') return __showPath();
 		if (answers.option === 'all') return __getAllData();
 		if (answers.option === 'clear') return __clearData();
+		if (answers.option === 'changeGitBranches') return __changeGitDefaultBranches();
 		if (answers.option === 'removeGitProvider') return __removeGitProviderData();
 		if (answers.option === 'removeGitProject') return __removeGitProjectData();
 	});
