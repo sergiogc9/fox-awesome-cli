@@ -12,6 +12,7 @@ An awesome cli tool for git, node, npm, yarn, bash and more.
   - [General commands](#general-commands)
     - [`help`](#help)
     - [`info`](#info)
+    - [`config`](#config)
   - [Git commands](#git-commands)
     - [`branch-create`](#branch-create)
     - [`branch-sync`](#branch-sync)
@@ -68,6 +69,33 @@ Options:
 
 - `--node`: Returns info about the installed node packages.
 - `--json`: Returns the data in JSON format to be parsed.
+
+### `config`
+
+Manage, modify and / or remove the data saved used by the cli tool.
+
+All the data is saved locally it **IT IS NOT SENT NOR SHARED** to any server.
+
+With this command you can manage this data with the following actions:
+
+- See all data saved in JSON format.
+- Clear all data.
+- See path where the data is located.
+- Remove personal data saved related to git providers (Github, Azure, Bitbucket, etc.).
+- Remove saved data related to a git project or repository.
+
+Use the command without options and all options will be prompted. Use option as shortcuts to options without a prompt.
+
+Options:
+
+- `-a, --all`: See all data saved.
+- `-p, --path`: Show the path where data is located.
+- `-c, --clear`: Clear all saved data.
+
+Considerations:
+
+- By default, feature branches are created from develop. Hotfix and release branches are created from master.
+- If description is provided, it is appended at the end of the branch name, replacing spaces with underscores.
 
 ## Git commands
 

@@ -1,6 +1,7 @@
 import yargs from 'yargs';
 
 import defaultHandler from 'commands/default';
+import config from 'commands/config';
 import branchCreate from 'commands/branch-create';
 import branchSync from 'commands/branch-sync';
 import pkgManager from 'commands/pkg-manager';
@@ -26,6 +27,7 @@ yargs(process.argv.slice(2))
 		() => defaultHandler(process.argv.slice(2))
 	)
 	// General commands
+	.command(config.name, config.description, config.config, config.handler)
 	.command(info.name, info.description, info.config, info.handler)
 	// Node commands
 	.command(pkgManager.name, pkgManager.description, pkgManager.config, pkgManager.handler)
