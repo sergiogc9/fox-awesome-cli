@@ -12,8 +12,7 @@
 	"bin": {
 		"foxcli": "bin/cli",
 		"fox": "bin/cli",
-		"fcli": "bin/cli",
-		"fc": "bin/cli"
+		"fcli": "bin/cli"
 	},
 	"publishConfig": {
 		"access": "public"

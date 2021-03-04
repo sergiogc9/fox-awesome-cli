@@ -22,8 +22,7 @@ yargs(process.argv.slice(2))
 			y
 				.usage('Usage: foxcli <command> [options]')
 				.usage('Usage: fox <command> [options]')
-				.usage('Usage: fcli <command> [options]')
-				.usage('Usage: fc <command> [options]'),
+				.usage('Usage: fcli <command> [options]'),
 		() => defaultHandler(process.argv.slice(2))
 	)
 	// General commands

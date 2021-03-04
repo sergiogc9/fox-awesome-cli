@@ -43,7 +43,7 @@ Or install locally:
 
 ## Usage
 
-This cli tool can be used with some aliases: `foxcli`, `fox`, `fcli` and `fc`. You can choose the one you prefer.
+This cli tool can be used with some aliases: `foxcli`, `fox` and `fcli`. You can choose the one you prefer.
 
 The usage is:
 
