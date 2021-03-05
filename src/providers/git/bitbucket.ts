@@ -21,6 +21,8 @@ class BitbucketProvider extends GitProvider {
 				'POST',
 				`repositories/${workspace}/${name}/pullrequests`,
 				{
+					// eslint-disable-next-line @typescript-eslint/naming-convention
+					close_source_branch: true,
 					description: options.description,
 					destination: {
 						branch: {

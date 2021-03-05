@@ -22,6 +22,9 @@ class AzureProvider extends GitProvider {
 				'POST',
 				`${organization}/${project}/_apis/git/repositories/${id}/pullrequests`,
 				{
+					completionOptions: {
+						deleteSourceBranch: true
+					},
 					description: options.description.length ? options.description : undefined,
 					isDraft: options.isDraft,
 					sourceRefName: `refs/heads/${options.from}`,
