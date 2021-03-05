@@ -1,11 +1,17 @@
 import chalk from 'chalk';
-import inquirer from 'inquirer';
+import inquirer, { QuestionCollection } from 'inquirer';
 import axios, { AxiosRequestConfig, Method } from 'axios';
 
 import configStore from 'lib/config';
 import log from 'lib/log';
 import GitProvider from 'providers/git';
 import { getRepoRemoteUrl } from 'lib/git';
+
+type BitbucketReviewer = {
+	uuid: string;
+	// eslint-disable-next-line @typescript-eslint/naming-convention
+	display_name: string;
+};
 
 class BitbucketProvider extends GitProvider {
 	constructor() {
@@ -15,6 +21,8 @@ class BitbucketProvider extends GitProvider {
 
 	public createPullRequest: GitProvider['createPullRequest'] = async options => {
 		const { workspace, name } = await this.__getRepoInfo();
+		const reviewers = await this.__getRepoReviewers(workspace, name);
+		const selectedReviewersIds = await this.__promptReviewers(reviewers);
 		try {
 			// eslint-disable-next-line @typescript-eslint/naming-convention
 			const data = await this.__doRequest<{ links: { html: { href: string } } }>(
@@ -29,6 +37,7 @@ class BitbucketProvider extends GitProvider {
 							name: options.to
 						}
 					},
+					reviewers: selectedReviewersIds.map(id => ({ uuid: id })),
 					source: {
 						branch: {
 							name: options.from
@@ -59,6 +68,37 @@ class BitbucketProvider extends GitProvider {
 			}
 		]);
 		return answer.token;
+	};
+
+	private __getRepoReviewers = async (workspace: string, name: string) => {
+		try {
+			// eslint-disable-next-line @typescript-eslint/naming-convention
+			const data = await this.__doRequest<{ values: BitbucketReviewer[] }>(
+				'GET',
+				`repositories/${workspace}/${name}/default-reviewers`
+			);
+			return data.values || [];
+		} catch (e) {
+			return [];
+		}
+	};
+
+	private __promptReviewers = async (reviewers: BitbucketReviewer[]) => {
+		if (!reviewers.length) return [];
+
+		const questions: QuestionCollection = [
+			{
+				name: 'reviewers',
+				type: 'checkbox',
+				message: 'Select reviewers:',
+				choices: reviewers.map(r => ({ name: r.display_name, value: r.uuid }))
+			}
+		];
+		const answers = await inquirer.prompt<{
+			reviewers: string[];
+		}>(questions);
+
+		return answers.reviewers;
 	};
 
 	private __getBitbucketUsername = async () => {
