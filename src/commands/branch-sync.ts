@@ -45,7 +45,7 @@ const handler = (args: CommandArgs) => {
 
 		const sourceBranch = getSourceBranchFromBranch(currentBranch);
 		const params = args.rebase ? '--rebase' : '';
-		const { code } = exec(`git pull origin ${sourceBranch} ${params}`);
+		const { code } = exec(`git pull origin ${sourceBranch} --ff ${params}`);
 		if (code) throw { code };
 	});
 };

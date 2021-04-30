@@ -74,7 +74,7 @@ Options:
 
 Manage, modify and / or remove the data saved used by the cli tool.
 
-All the data is saved locally it **IT IS NOT SENT NOR SHARED** to any server.
+All the data saved **IS NOT SENT NOR SHARED** to any server.
 
 With this command you can manage this data with the following actions:
 
