@@ -8,6 +8,7 @@ import pkgManager from 'commands/pkg-manager';
 import pkgPublish from 'commands/pkg-publish';
 import pkgVersion from 'commands/pkg-version';
 import pr from 'commands/pr';
+import push from 'commands/push';
 import info from 'commands/info';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -35,4 +36,5 @@ yargs(process.argv.slice(2))
 	// Git commands
 	.command(branchCreate.name, branchCreate.description, branchCreate.config, branchCreate.handler)
 	.command(branchSync.name, branchSync.description, branchSync.config, branchSync.handler)
-	.command(pr.name, pr.description, pr.config, pr.handler).argv;
+	.command(pr.name, pr.description, pr.config, pr.handler)
+	.command(push.name, push.description, push.config, () => push.handler(process.argv.slice(2))).argv;

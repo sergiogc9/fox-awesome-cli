@@ -17,6 +17,7 @@ An awesome cli tool for git, node, npm, yarn, bash and more.
     - [`branch-create`](#branch-create)
     - [`branch-sync`](#branch-sync)
     - [`pr`](#pr)
+    - [`push`](#push)
   - [NodeJS commands](#nodejs-commands)
     - [`pkg-manager`](#pkg-manager)
     - [`pkg-version`](#pkg-version)
@@ -176,6 +177,19 @@ Options:
 
 - `--target`: Use a custom branch as target branch for the pull request.
 - `--draft`: Create the pull request as draft. This option is not available in some providers.
+
+### `push`
+
+This command is basically a shorthand for `git pull` with some improvements.
+
+This command performs:
+
+- Tries to execute the `git pull` command with the passed arguments as it is done using git directly.
+- If an error occurs and is one of the controlled errors, it tries to solve it.
+
+Controlled errors implemented:
+
+- If the current branch has not been pushed to remote yet, the cli pushes it to origin automatically.
 
 ## NodeJS commands
 
