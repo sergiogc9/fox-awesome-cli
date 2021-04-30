@@ -153,6 +153,7 @@ This command performs:
 
 Options:
 
+- `-f, --from`: Synchronize the current branch from a custom branch.
 - `-r, --rebase`: Forces git to use rebase.
 
 ### `pr`

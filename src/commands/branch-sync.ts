@@ -13,6 +13,7 @@ import { exec } from 'lib/shell';
 import log from 'lib/log';
 
 interface CommandArgs {
+	from?: string;
 	rebase?: boolean;
 }
 
@@ -26,6 +27,11 @@ const config = (yargs: Argv) => {
 		.version(false)
 		.help('help')
 		.option('help', {  alias: 'h'})
+		.option('from', {
+			alias: 'f',
+			describe: 'Use custom source branch to sync the current branch from',
+			type: 'string'
+		})
 		.option('rebase', {
 			alias: 'r',
 			default: false,
@@ -43,7 +49,7 @@ const handler = (args: CommandArgs) => {
 			return log.warn(`You are in a source branch: ${chalk.bold.underline(currentBranch)}. Doing nothing.`);
 		}
 
-		const sourceBranch = getSourceBranchFromBranch(currentBranch);
+		const sourceBranch = args.from || getSourceBranchFromBranch(currentBranch);
 		const params = args.rebase ? '--rebase' : '';
 		const { code } = exec(`git pull origin ${sourceBranch} --ff ${params}`);
 		if (code) throw { code };
