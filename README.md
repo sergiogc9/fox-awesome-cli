@@ -233,3 +233,6 @@ Steps for running locally:
 - Locally link the cli binaries: `yarn link`
 
 Then you can test it: `yarn foxcli` or `yarn foxcli info`
+
+
+1111
