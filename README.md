@@ -16,6 +16,7 @@ An awesome cli tool for git, node, npm, yarn, bash and more.
   - [Git commands](#git-commands)
     - [`branch-create`](#branch-create)
     - [`branch-sync`](#branch-sync)
+    - [`is-branch-synced`](#is-branch-synced)
     - [`pr`](#pr)
     - [`push`](#push)
   - [NodeJS commands](#nodejs-commands)
@@ -155,6 +156,25 @@ Options:
 
 - `-f, --from`: Synchronize the current branch from a custom branch.
 - `-r, --rebase`: Forces git to use rebase.
+
+### `is-branch-synced`
+
+Check if current branch is synced with the remote source branch (i.e. the current branch has the newest changes from remote source branch).
+
+This command is useful to prevent creating a new pull request or pushing new changes without if current branch is not synchronized. For example, it can be used in the `pre-push` git hook.
+
+If you are already in a source branch (i.e. master or develop) this command does nothing.
+
+This command only checks the sync status with the remote current branch. If you have changes locally not pushed to remote it won't work as expected, but main source branches (i.e. master, develop) should not be committed locally.
+
+This command performs:
+
+- Fetches the most recent changes from source branch.
+- Checks if common base commit between current branch and remote source branch last commit equals to last remote source branch last commit.
+
+Options:
+
+- `-f, --from`: Check sync status with a remote custom branch. Use branch without `origin/` prefix.
 
 ### `pr`
 
