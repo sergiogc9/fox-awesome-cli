@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.1.0] - May, 2021
+
+#### Added
+
+- Added `push` shorthand command for git push.
+- Added from argument to branch-sync command.
+- Added `is-branch-synced`command.
+
+#### Fixed
+
+- Fix warning in newer git version when syncing a branch.
+- Fixed git, yarn and npm commands returning a 0 exit code even the command failed.
+
 ## [v1.0.1] - March, 2021
 
 #### Added
