@@ -4,6 +4,7 @@ import defaultHandler from 'commands/default';
 import config from 'commands/config';
 import branchCreate from 'commands/branch-create';
 import branchSync from 'commands/branch-sync';
+import isBranchSynced from 'commands/is-branch-synced';
 import pkgManager from 'commands/pkg-manager';
 import pkgPublish from 'commands/pkg-publish';
 import pkgVersion from 'commands/pkg-version';
@@ -36,5 +37,6 @@ yargs(process.argv.slice(2))
 	// Git commands
 	.command(branchCreate.name, branchCreate.description, branchCreate.config, branchCreate.handler)
 	.command(branchSync.name, branchSync.description, branchSync.config, branchSync.handler)
+	.command(isBranchSynced.name, isBranchSynced.description, isBranchSynced.config, isBranchSynced.handler)
 	.command(pr.name, pr.description, pr.config, pr.handler)
 	.command(push.name, push.description, push.config, () => push.handler(process.argv.slice(2))).argv;
