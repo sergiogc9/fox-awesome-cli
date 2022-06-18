@@ -1,3 +1,10 @@
+## [1.1.1-beta.1](https://github.com/sergiogc9/fox-awesome-cli/compare/v1.1.0...v1.1.1-beta.1) (2022-06-18)
+
+
+### Bug Fixes
+
+* Use semantic-release ([a64b1ab](https://github.com/sergiogc9/fox-awesome-cli/commit/a64b1ab5898fa12ce31899e80ea18236a85540c4))
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
