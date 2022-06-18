@@ -33,7 +33,7 @@ I created this cli tool to make my life easier when developing. Its goal is to p
 
 ## Installation
 
-**Prerequisites**: NodeJS (>=14.x tested only) installed.
+**Prerequisites**: NodeJS (>=16.x tested only) installed.
 
 You can install it globally:
 
