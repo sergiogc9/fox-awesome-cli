@@ -41,7 +41,7 @@
 		"prettier": "prettier --write . --ignore-path .gitignore",
 		"prettier:check": "prettier --check . --ignore-path .gitignore",
 		"lint": "eslint . --ignore-path .gitignore",
-		"foxcli": "node dist/cli.js"
+		"foxcli": "node dist/cjs/index.js"
 	},
 	"dependencies": {
 		"axios": "^0.21.1",
@@ -56,6 +56,8 @@
 		"yargs": "16.2.0"
 	},
 	"devDependencies": {
+		"@semantic-release/changelog": "^6.0.1",
+		"@semantic-release/git": "^10.0.1",
 		"@sergiogc9/eslint-config": "^1.0.0",
 		"@sergiogc9/js-bundle": "^1.1.1",
 		"@types/configstore": "4.0.0",
@@ -69,6 +71,7 @@
 		"eslint-plugin-prettier": "3.3.1",
 		"husky": "4.3.8",
 		"prettier": "2.2.1",
+		"semantic-release": "^19.0.3",
 		"typescript": "4.1.5"
 	},
 	"engines": {

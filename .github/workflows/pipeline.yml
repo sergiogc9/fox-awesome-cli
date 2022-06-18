@@ -51,8 +51,8 @@ jobs:
         run: yarn install --ignore-scripts --frozen-lockfile
       - name: Build
         run: yarn build
-      - name: Publish to NPM
-        if: contains(github.ref, 'master')
-        run: yarn foxcli pkg-publish
+      - name: Execute semantic release
+        run: yarn semantic-release
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
