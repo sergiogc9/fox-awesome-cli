@@ -31,7 +31,7 @@
 		"foxcli": "node dist/cli.js"
 	},
 	"dependencies": {
-		"axios": "0.21.1",
+		"axios": "^0.21.1",
 		"chalk": "4.1.0",
 		"configstore": "5.0.1",
 		"envinfo": "7.7.4",
