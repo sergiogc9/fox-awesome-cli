@@ -36,7 +36,7 @@
 		}
 	},
 	"scripts": {
-		"watch": "build --watch",
+		"watch": "yarn build --watch",
 		"build": "node build.js",
 		"prettier": "prettier --write . --ignore-path .gitignore",
 		"prettier:check": "prettier --check . --ignore-path .gitignore",
@@ -59,7 +59,7 @@
 		"@semantic-release/changelog": "^6.0.1",
 		"@semantic-release/git": "^10.0.1",
 		"@sergiogc9/eslint-config": "^1.0.0",
-		"@sergiogc9/js-bundle": "^1.1.1",
+		"@sergiogc9/js-bundle": "^1.1.2",
 		"@types/configstore": "4.0.0",
 		"@types/figlet": "1.2.1",
 		"@types/inquirer": "7.3.1",

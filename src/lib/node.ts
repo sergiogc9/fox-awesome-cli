@@ -40,7 +40,12 @@ export const getPackageVersions = (pkg: string): string[] => {
 	const { stdout } = execSilentWithThrow(`npm view ${pkg} versions`);
 	const versions = stdout.replace(/'/g, '"');
 
-	return JSON.parse(versions);
+	try {
+		return JSON.parse(versions);
+	} catch (e) {
+		// Fallback if there is only one version
+		return [versions];
+	}
 };
 
 export const NPM_COMMANDS = [
