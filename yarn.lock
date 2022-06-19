@@ -465,10 +465,10 @@
     eslint-config-airbnb-typescript "12.3.1"
     eslint-config-prettier "7.2.0"
 
-"@sergiogc9/js-bundle@^1.1.2":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@sergiogc9/js-bundle/-/js-bundle-1.1.2.tgz#285c40cc11eae92ee9aaf5a86fd85726e497fc65"
-  integrity sha512-GAPtcFhCCAy2d14ONmnD789UVZfGuI7fZH74sCpkFa77nsNKIyOP5yVbliztA0pkVHUDXGbswWMUz/Jr8yN/ag==
+"@sergiogc9/js-bundle@^1.1.3":
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@sergiogc9/js-bundle/-/js-bundle-1.1.3.tgz#e557bb63229d9313f52ea9a7dedd27a6d1926351"
+  integrity sha512-R06vt6xjIqApQ40O0856mnYGmj3TAPZ44SGdSIskdtx5tbYE16WpULRS1ZGNk+D8oWTClJ2WegG2ZPkYGx+Bkw==
   dependencies:
     chalk "^4.0.0"
     esbuild "^0.14.42"
