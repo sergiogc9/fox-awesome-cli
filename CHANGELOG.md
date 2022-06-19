@@ -1,9 +1,8 @@
 ## [1.1.2](https://github.com/sergiogc9/fox-awesome-cli/compare/v1.1.1...v1.1.2) (2022-06-19)
 
-
 ### Bug Fixes
 
-* Fix issue in pkg-publish when only one version is published ([52647b9](https://github.com/sergiogc9/fox-awesome-cli/commit/52647b923e0d63b30e5e8f860f6d8b57ea2e85fa))
+- Fix issue in pkg-publish when only one version is published ([52647b9](https://github.com/sergiogc9/fox-awesome-cli/commit/52647b923e0d63b30e5e8f860f6d8b57ea2e85fa))
 
 ## [1.1.1](https://github.com/sergiogc9/fox-awesome-cli/compare/v1.1.0...v1.1.1) (2022-06-18)
 
