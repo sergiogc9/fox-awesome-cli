@@ -7,7 +7,7 @@ import {
 	DEVELOP_BRANCH,
 	getCurrentBranch,
 	getSourceBranchFromBranch,
-	MASTER_BRANCH
+	MAIN_BRANCH
 } from 'lib/git';
 import { exec } from 'lib/shell';
 import log from 'lib/log';
@@ -45,7 +45,7 @@ const handler = (args: CommandArgs) => {
 		checkGitInstallation();
 
 		const currentBranch = getCurrentBranch();
-		if ([MASTER_BRANCH, DEVELOP_BRANCH].includes(currentBranch)) {
+		if ([MAIN_BRANCH, DEVELOP_BRANCH].includes(currentBranch)) {
 			return log.warn(`You are in a source branch: ${chalk.bold.underline(currentBranch)}. Doing nothing.`);
 		}
 

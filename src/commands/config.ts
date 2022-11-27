@@ -115,8 +115,48 @@ const __changeGitDefaultBranch = async (branch: string) => {
 };
 
 const __changeGitDefaultBranches = async () => {
-	await __changeGitDefaultBranch('master');
+	await __changeGitDefaultBranch('main');
 	await __changeGitDefaultBranch('develop');
+};
+
+const __changeGitDefaultWorkflow = async () => {
+	const currentWorkflow: GitWorkflow = configStore.get(`git.workflow.default`) || 'only_main';
+	log.text('');
+	if (currentWorkflow === 'only_main')
+		log.text(`Your are currently using a ${chalk.blueBright.bold('continuous deployment')} workflow.`);
+	else if (currentWorkflow === 'main_and_develop')
+		log.text(`Your are currently using a ${chalk.blueBright.bold('git-flow')} workflow.`);
+	const questions: QuestionCollection = [
+		{
+			name: 'workflow',
+			type: 'rawlist',
+			message: 'Select an workflow:',
+			choices: [
+				{
+					name: 'Continuous deployment (only one main branch)',
+					value: 'only_main'
+				},
+				{
+					name: 'Git-flow (one main branch and one develop branch)',
+					value: 'main_and_develop'
+				}
+			]
+		}
+	];
+	const answers = await inquirer.prompt<{ workflow: string }>(questions);
+	configStore.set(`git.workflow.default`, answers.workflow);
+	log.text(
+		`Your workflow has been set to ${
+			answers.workflow === 'only_main'
+				? chalk.greenBright.bold('continuous deployment')
+				: chalk.greenBright.bold('git-flow')
+		}`
+	);
+};
+
+const __exitConfig = async () => {
+	log.info('Exited without changes');
+	process.exit();
 };
 
 const handler = (args: CommandArgs) => {
@@ -149,26 +189,44 @@ const handler = (args: CommandArgs) => {
 						value: 'changeGitBranches'
 					},
 					{
+						name: 'Change git default workflow',
+						value: 'changeGitWorkflow'
+					},
+					{
 						name: 'Remove git provider personal data (token, username, etc)',
 						value: 'removeGitProvider'
 					},
 					{
 						name: 'Remove current git project data',
 						value: 'removeGitProject'
+					},
+					{
+						name: 'Exit',
+						value: 'exit'
 					}
 				]
 			}
 		];
 		const answers = await inquirer.prompt<{
-			option: 'all' | 'clear' | 'path' | 'removeGitProvider' | 'removeGitProject' | 'changeGitBranches';
+			option:
+				| 'all'
+				| 'clear'
+				| 'path'
+				| 'removeGitProvider'
+				| 'removeGitProject'
+				| 'changeGitBranches'
+				| 'changeGitWorkflow'
+				| 'exit';
 		}>(questions);
 
 		if (answers.option === 'path') return __showPath();
 		if (answers.option === 'all') return __getAllData();
 		if (answers.option === 'clear') return __clearData();
 		if (answers.option === 'changeGitBranches') return __changeGitDefaultBranches();
+		if (answers.option === 'changeGitWorkflow') return __changeGitDefaultWorkflow();
 		if (answers.option === 'removeGitProvider') return __removeGitProviderData();
 		if (answers.option === 'removeGitProject') return __removeGitProjectData();
+		if (answers.option === 'exit') return __exitConfig();
 	});
 };
 

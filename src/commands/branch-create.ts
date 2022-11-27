@@ -18,14 +18,14 @@ type PromptAnswer = {
 };
 type PromptQuestions = QuestionCollection<PromptAnswer>[];
 
-const branchTypes = ['feature', 'hotfix', 'release'] as const;
+const branchTypes = ['feat', 'fix', 'chore', 'docs', 'test', 'build', 'refactor', 'release', 'none'] as const;
 
 const name = 'branch-create';
-const description = 'Creates a new branch from updated master or develop.';
+const description = 'Creates a new branch from an updated source branch.';
 
 const config = (yargs: Argv) => {
 	return yargs
-		.usage('foxcli branch-create [issue-id] [options]')
+		.usage('foxcli branch-create [options]')
 		.version(false)
 		.help('help')
 		.option('help', { alias: 'h' })
@@ -45,8 +45,6 @@ const handler = (args: CommandArgs) => {
 	catchError(async () => {
 		git.checkGitInstallation();
 
-		const argsIssueId = args._[1];
-
 		const questions: PromptQuestions = [
 			{
 				name: 'branchType',
@@ -55,25 +53,29 @@ const handler = (args: CommandArgs) => {
 				choices: branchTypes.map(type => ({ name: type, value: type }))
 			}
 		];
-		if (!argsIssueId) {
-			questions.push({
-				name: 'issueId',
-				message: 'Enter the issue ID: e.g. CJP-100, CORN-2000 or GIS-205\n',
-				type: 'input'
-			});
-		}
+
+		questions.push({
+			name: 'issueId',
+			message: 'Enter the issue ID: e.g. FEAR-1000\n',
+			type: 'input'
+		});
+
 		questions.push({
 			name: 'description',
-			message: 'Enter a description for the branch. If empty none description text will be appended to branch name:\n',
+			message: 'Enter a description for the branch:\n',
 			type: 'input'
 		});
 
 		const answers = await inquirer.prompt<PromptAnswer>(questions);
 
+		if (!answers.description.trim()) throw { message: `You must provide a description.` };
+
 		const branchDescription = answers.description.trim().length
-			? `-${answers.description.toLowerCase().replace(/\s+/g, '_')}`
+			? `${answers.description.toLowerCase().replace(/\s+/g, '_')}`
 			: '';
-		const newBranch = `${answers.branchType}/${answers.issueId || argsIssueId}${branchDescription}`;
+		const newBranch = `${answers.branchType !== 'none' ? `${answers.branchType}-` : ''}${
+			answers.issueId ? `${answers.issueId}-` : ''
+		}${branchDescription}`;
 		const sourceBranch = args.from || git.getSourceBranchFromBranch(newBranch);
 		const currentBranch = git.getCurrentBranch();
 

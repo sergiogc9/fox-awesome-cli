@@ -1,7 +1,7 @@
 # fox-awesome-cli
 
 ![](https://badgen.net/npm/v/fox-awesome-cli?icon=npm&label)
-![](https://github.com/sergiogc9/fox-awesome-cli/workflows/Github%20Pipeline/badge.svg?branch=master)
+![](https://github.com/sergiogc9/fox-awesome-cli/workflows/Github%20Pipeline/badge.svg?branch=main)
 
 An awesome cli tool for git, node, npm, yarn, bash and more.
 
@@ -83,7 +83,8 @@ With this command you can manage this data with the following actions:
 - See all data saved in JSON format.
 - Clear all data.
 - See path where the data is located.
-- Change default branches if not using master or develop.
+- Change default branches if not using main or develop.
+- Change default used Git workflow (continuous deployment or git-flow). See more info in Git section below.
 - Remove personal data saved related to git providers (Github, Azure, Bitbucket, etc.).
 - Remove saved data related to a git project or repository.
 
@@ -95,28 +96,20 @@ Options:
 - `-p, --path`: Show the path where data is located.
 - `-c, --clear`: Clear all saved data.
 
-Considerations:
-
-- By default, feature branches are created from develop. Hotfix and release branches are created from master.
-- If description is provided, it is appended at the end of the branch name, replacing spaces with underscores.
-
 ## Git commands
 
 **Prerequisites**: Git installed.
 
 These commands are focused on making the developer life easier while working with Git.
 
-It works only in a basic **gitflow** workflow with the following branches:
+It works with two Git workflows:
 
-- `master` (configurable)
-- `hotfix/XXX` or `hotfix-XXX`
-- `release/XXX` or `release-XXX`
-- `develop` (configurable)
-- `feature/XXX` or `feature-XXX`
+- **Continuous deployment** (default): Only use a _main_ branch. All commands will use as a source branch the branch configured as _main_.
+- **Git-flow**: Use both _main_ and _develop_ branches. All branches except _fix_ and _release_ will use as source branch the branch configured as _develop_.
 
-ℹ️ You can change default master and develop branches if you use others (e.g. main or devel) using the `config` command (see above).
+ℹ️ You can change default main and develop branches if you use others (e.g. master or devel) using the `config` command (see above).
 
-ℹ️ You can use most of git commands using this cli. All git commands not matching one of the cli custom commands can be executed. E.g.: `foxcli commit` or `foxcli merge master`.
+ℹ️ You can use most of git commands using this cli. All git commands not matching one of the cli custom commands can be executed. E.g.: `foxcli commit` or `foxcli merge main`.
 
 ### `branch-create`
 
@@ -124,12 +117,19 @@ Creates a new branch using the last changes in source (or from) branch.
 
 This command performs:
 
-- Asks for branch type, issue id (if not provided) and description to generate a new branch name.
-- If not provided, detects the source branch, e.g. for feature it uses develop as source branch.
+- Asks for branch type, issue id and description to generate a new branch name.
+- If not provided, detects the source branch, e.g. if using git-flow then for feature branches it uses develop as source branch.
 - Pulls the most recent changes in source branch.
 - Creates the new branch.
-- If branch type is release, merges content from develop.
+- If branch type is release using git-flow, merges content from develop.
 - If push parameter is set, pushes the branch to remote.
+
+The output format of branches are:
+
+- If issue id is provided: `feature-ISSUE-100-this_is_a_nice_description`.
+- If issue id is not provided: `feature-this_is_a_nice_description`.
+- If branch type is `none`: `ISSUE-100-this_is_a_nice_description`.
+- If branch type is `none` and issue id is not provided: `this_is_a_nice_description`.
 
 Options:
 
@@ -138,14 +138,16 @@ Options:
 
 Considerations:
 
-- By default, feature branches are created from develop. Hotfix and release branches are created from master.
+- By default, if using git-flow workflow, fix and release branches are created from main and others are created from develop.
 - If description is provided, it is appended at the end of the branch name, replacing spaces with underscores.
 
 ### `branch-sync`
 
-Synchronizes the current branch with the remote source branch. By default **hotfix** and **release** branches are synchronized with **master** branch and **feature** branches are synchronized with **develop**.
+Synchronizes the current branch with the remote source branch.
 
-If you are already in a source branch (i.e. master or develop) this command does nothing.
+By default, if using continuous deployment workflow, all branches are synchronized with **main**. Otherwise, if using git-flow, **hotfix** and **release** branches are synchronized with **main** branch and **feature** branches are synchronized with **develop**.
+
+If you are already in a source branch (i.e. main or develop) this command does nothing.
 
 This command performs:
 
@@ -163,9 +165,9 @@ Check if current branch is synced with the remote source branch (i.e. the curren
 
 This command is useful to prevent creating a new pull request or pushing new changes without if current branch is not synchronized. For example, it can be used in the `pre-push` git hook.
 
-If you are already in a source branch (i.e. master or develop) this command does nothing.
+If you are already in a source branch (i.e. main or develop) this command does nothing.
 
-This command only checks the sync status with the remote current branch. If you have changes locally not pushed to remote it won't work as expected, but main source branches (i.e. master, develop) should not be committed locally.
+This command only checks the sync status with the remote current branch. If you have changes locally not pushed to remote it won't work as expected, but main source branches (i.e. main, develop) should not be committed locally.
 
 This command performs:
 

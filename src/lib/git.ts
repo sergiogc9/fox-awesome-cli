@@ -8,7 +8,7 @@ import GithubProvider from 'providers/git/github';
 import AzureProvider from 'providers/git/azure';
 import BitbucketProvider from 'providers/git/bitbucket';
 
-export const MASTER_BRANCH = configStore.get('git.branch.master') || 'master';
+export const MAIN_BRANCH = configStore.get('git.branch.main') || 'main';
 export const DEVELOP_BRANCH = configStore.get('git.branch.develop') || 'develop';
 
 export const checkGitInstallation = () => {
@@ -30,9 +30,22 @@ export const getRepoRemoteUrl = () => {
 	return stdout;
 };
 
+const __detectGitWorkflow = (): GitWorkflow => {
+	return configStore.get(`git.workflow.default`) ?? 'only_main';
+};
+
 export const getSourceBranchFromBranch = (branch: string) => {
-	if (branch === DEVELOP_BRANCH || /^(hotfix|release)(\/|-).*/.test(branch)) return MASTER_BRANCH;
-	return DEVELOP_BRANCH;
+	const gitWorkflow = __detectGitWorkflow();
+
+	if (gitWorkflow === 'only_main') {
+		return MAIN_BRANCH;
+	}
+	if (gitWorkflow === 'main_and_develop') {
+		if (branch === DEVELOP_BRANCH || /^(fix|release)(\(|:).*/.test(branch)) return MAIN_BRANCH;
+		return DEVELOP_BRANCH;
+	}
+
+	throw new Error('Current workflow value is not valid. Please clear config.');
 };
 
 const __detectRepoServer = async (repoUrl: string) => {
