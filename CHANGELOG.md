@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/sergiogc9/fox-awesome-cli/compare/v1.2.0...v1.3.0) (2023-06-03)
+
+
+### Features
+
+* Add --only-warn option to is-branch-synced command ([b98699e](https://github.com/sergiogc9/fox-awesome-cli/commit/b98699e49953d54534172a84f14c4b34b16877a4))
+
 # [1.2.0](https://github.com/sergiogc9/fox-awesome-cli/compare/v1.1.2...v1.2.0) (2022-11-27)
 
 ### Features
