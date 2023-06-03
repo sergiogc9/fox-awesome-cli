@@ -177,6 +177,7 @@ This command performs:
 Options:
 
 - `-f, --from`: Check sync status with a remote custom branch. Use branch without `origin/` prefix.
+- `--only-warn`: Only show a warning. The execution will not fail using it. Default: `false`.
 
 ### `pr`
 

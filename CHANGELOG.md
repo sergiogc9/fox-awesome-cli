@@ -1,9 +1,8 @@
 # [1.2.0](https://github.com/sergiogc9/fox-awesome-cli/compare/v1.1.2...v1.2.0) (2022-11-27)
 
-
 ### Features
 
-* Add compatibilty for continuous deployment git workflow ([2317f75](https://github.com/sergiogc9/fox-awesome-cli/commit/2317f75085bf22c4d456f04d0ae533caff015a4c))
+- Add compatibilty for continuous deployment git workflow ([2317f75](https://github.com/sergiogc9/fox-awesome-cli/commit/2317f75085bf22c4d456f04d0ae533caff015a4c))
 
 ## [1.1.2](https://github.com/sergiogc9/fox-awesome-cli/compare/v1.1.1...v1.1.2) (2022-06-19)
 

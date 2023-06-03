@@ -14,22 +14,27 @@ import log from 'lib/log';
 
 interface CommandArgs {
 	from?: string;
+	onlyWarn?: boolean;
 }
 
 const name = 'is-branch-synced';
 const description = 'Checks if current branch is synchronized with remote branch';
 
 const config = (yargs: Argv) => {
-	// prettier-ignore
 	return yargs
 		.usage('foxcli is-branch-synced [options]')
 		.version(false)
 		.help('help')
-		.option('help', {  alias: 'h'})
+		.option('help', { alias: 'h' })
 		.option('from', {
 			alias: 'f',
 			describe: 'Use custom branch to check sync if current branch is synced with',
 			type: 'string'
+		})
+		.option('only-warn', {
+			default: false,
+			describe: 'Only show a warning. The execution will not fail using it.',
+			type: 'boolean'
 		});
 };
 
@@ -52,9 +57,8 @@ const handler = (args: CommandArgs) => {
 		).stdout.replace(new RegExp('"', 'g'), '');
 		if (baseCommonCommit === lastRemoteSourceBranchCommit) {
 			log.success('Current branch is synced');
-		} else {
-			throw { error: 1, message: 'Current branch is not synced with remote' };
-		}
+		} else if (args.onlyWarn) log.warn('WARNING! Current branch is not synced with remote');
+		else throw { error: 1, message: 'Current branch is not synced with remote' };
 	});
 };
 
